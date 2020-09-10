@@ -21,39 +21,43 @@ int pfs_kernel_version(char *proc_dir, char *version_buf, size_t buf_sz)
 	perror("open_path"); 
     return -1;
 }
-	
 	one_lineread(fd, version_buf,buf_sz);
-	ssize_t strcspn(version_buf,'-');
+	size_t dash_pos = strcspn(version_buf,"-");
 	version_buf[dash_pos]='\0';
 return 0;
 }
 
 int pfs_cpu_model(char *proc_dir, char *model_buf, size_t buf_sz)
 {
-int fd=open_path(proc_dir,"cpuinfo");
+    int fd = open_path(proc_dir, "cpuinfo");
+	if(fd <= 0){
+	    perror("open_path"); 
+        return -1;
+    }
+    
+    size_t line_sz=0;
+    char line[128];
+    while((line_sz = lineread(fd, line , 128))>0){
+        int tokens = 0;
+        char *next_tok = line;
+        char *curr_tok;
+        while ((curr_tok = next_token(&next_tok, " \n\t:")) != NULL) {
+            if(strcmp(curr_tok, "model name")== 0){
+                curr_tok = next_token(&next_tok, "\n\t:");
+                printf("Token %02d: '%s'\n", tokens++, curr_tok);
+                strncpy(model_buf, curr_tok + 1, 128);
+            }
+    }
 
-if(fd<=0){
-perror("open path");
-return -1;
+    }
+
+    close(fd);
+
+    return 0;
+
 }
 
-lineread(fd,buffer?,buff sz);
 
-one_lineread(fd,version_buf, buf_sz);
-size_t dash_pos = strcspn(version_buf
-
-char str[] = " this is a great string, is it not?!";
-int tokens = 0;
-char *next_tok = str;
-shr *curr_tok;
-
-while((curr_tok = next_token(&next_tok, ",?!")) != NULL){
-printf("token %02d: '%s' \n", tokens++, curr_tok);
-}
-
-return -1;
-   
-}
 
 int pfs_cpu_units(char *proc_dir)
 {
