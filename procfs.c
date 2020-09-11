@@ -11,6 +11,11 @@ int pfs_hostname(char *proc_dir, char *hostname_buf, size_t buf_sz)
 		    return -1;
 }
 one_lineread(fd, hostname_buf ,buf_sz);
+
+int ret = close(fd);
+if(ret == -1){
+    perror("close");
+}
 return 0;
 }
 
@@ -36,12 +41,12 @@ int pfs_cpu_model(char *proc_dir, char *model_buf, size_t buf_sz)
     }
     
     size_t line_sz=0;
-    char line[128];
-    while((line_sz = lineread(fd, line , 128))>0){
+    char line[256]={0};
+    while((line_sz = lineread(fd, line , 256))>0){
         int tokens = 0;
         char *next_tok = line;
         char *curr_tok;
-        while ((curr_tok = next_token(&next_tok, " \n\t:")) != NULL) {
+        while ((curr_tok = next_token(&next_tok, "\n\t:")) != NULL) {
             if(strcmp(curr_tok, "model name")== 0){
                 curr_tok = next_token(&next_tok, "\n\t:");
                 printf("Token %02d: '%s'\n", tokens++, curr_tok);
@@ -61,16 +66,41 @@ int pfs_cpu_model(char *proc_dir, char *model_buf, size_t buf_sz)
 
 int pfs_cpu_units(char *proc_dir)
 {
+     int fd = open_path(proc_dir, "/stat");
+	        if(fd <= 0){
+	            perror("open_path"); 
+                return -1;
+    }
+    size_t line_sz=0;
+    char line[1000]={0};
+    while((line_sz = lineread(fd, line , 256))>0){
+        int units = 0;
+        char *next_tok = line;
+        char *curr_tok;
+      while ((curr_tok = next_token(&next_tok, "\n\t:")) != NULL) {
+            if(strncmp(curr_tok, "cpu", 3)){
+                // curr_tok = next_token(&next_tok, "\n\t:");
+                units++;
+            }
+    }
+    printf("%d"+ units);
+    }
     return 0;
 }
 
 double pfs_uptime(char *proc_dir)
 {
+    int fd = open_path(proc_dir, "uptime");
+	        if(fd <= 0){
+	            perror("open_path"); 
+                return -1;
+    }
     return 0.0;
 }
 
 int pfs_format_uptime(double time, char *uptime_buf)
 {
+     
     return -1;
 }
 
