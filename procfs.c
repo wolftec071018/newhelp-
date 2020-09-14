@@ -2,6 +2,8 @@
 #include "procfs.h"
 #include <string.h>
 #include "util.h"
+#include <sys/sysinfo.h>
+
 
 int pfs_hostname(char *proc_dir, char *hostname_buf, size_t buf_sz)
 {
@@ -78,12 +80,12 @@ int pfs_cpu_units(char *proc_dir)
         char *next_tok = line;
         char *curr_tok;
       while ((curr_tok = next_token(&next_tok, "\n\t:")) != NULL) {
-            if(strncmp(curr_tok, "cpu", 3)){
+            if(strncmp(curr_tok, "cpu", 3)==0){
                 // curr_tok = next_token(&next_tok, "\n\t:");
                 units++;
             }
     }
-    printf("%d"+ units);
+                printf("Units: %02d: \n", units);
     }
     return 0;
 }
@@ -93,26 +95,102 @@ double pfs_uptime(char *proc_dir)
     int fd = open_path(proc_dir, "uptime");
 	        if(fd <= 0){
 	            perror("open_path"); 
-                return -1;
+                return 0;
     }
-    return 0.0;
+    int uptime_found;
+  size_t line_sz=0;
+    char line[1000]={0};
+    while((line_sz = lineread(fd, line , 256))>0){
+        char *next_tok = line;
+        char *curr_tok;
+      while ((curr_tok = next_token(&next_tok, "' '")) != NULL) {
+          uptime_found = *(curr_tok);
+    }
+    }
+    return uptime_found;
 }
 
 int pfs_format_uptime(double time, char *uptime_buf)
 {
-     
-    return -1;
+    int day= 60/60/24;//remember to add /
+    int hour= 60/60%24;
+    int min= 60%60;
+    int sec= 60;// remember to add%
+
+    if(day==0&& hour==0 && min==0){
+                        printf("%02d", sec);
+                        printf(" seconds");
+    }else if(day==0&& hour==0){
+        printf("%d", min);
+        printf(" minutes");
+        printf("%02d", sec);
+        printf(" seconds");
+    }else if(day==0){
+        printf("%02d", hour);
+        printf(" hour");
+        printf("%02d", min);
+        printf(" minutes");
+        printf("%02d", sec);
+        printf(" seconds");
+    }else{
+        printf("%02d", day);
+        printf(" day");
+        printf("%02d", hour);
+        printf(" hour");
+        printf("%02d", min);
+        printf(" minutes");
+        printf("%02d", sec);
+        printf(" seconds");
+    }
+
+    return 0;
 }
 
 struct load_avg pfs_load_avg(char *proc_dir)
-{
-   struct load_avg lavg = { 0 };
+{ 
+    //     int counter = 0;
+       struct load_avg lavg = { 0 };
+    //     double * pch;
+    //     int fd = open_path(proc_dir, "loadavg");
+	//         if(fd <= 0){
+	//             perror("open_path"); 
+    //             return lavg;
+    // }
+    // pch = strtok(fd," ");
+    // while(pch !=NULL){
+    //     if(counter ==0){
+    //         strtod(lavg.one,*pch);
+    //         // lavg.one = *pch;
+    //     }else if(counter ==1){
+    //         strtod(lavg.five,*pch);
+
+    //         // lavg.five= *pch;
+    //     }else if(counter ==2){
+    //         strtod(lavg.fifteen,*pch);
+
+    //         // lavg.fifteen = *pch;
+    //     }
+    //     pch = strtok(NULL," \n");
+    //     counter ++;
+    // }
+
+
    return lavg;
 }
 
 double pfs_cpu_usage(char *proc_dir, struct cpu_stats *prev, struct cpu_stats *curr)
-{
-    return 0.0;
+{   
+    float load;
+     int fd = open_path(proc_dir, "loadavg");
+	if(fd <= 0){
+	    perror("open_path"); 
+        return -1;
+    }
+    char fb[1024];//max lol
+    read(fd,fb, sizeof(fb));
+    sscanf(fb, "%f", &load);
+    close (fd);
+    return (int)load*100;
 }
 
 struct mem_stats pfs_mem_usage(char *proc_dir)

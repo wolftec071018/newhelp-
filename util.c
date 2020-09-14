@@ -6,7 +6,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
-
+#include <stdio.h>
+#include <errno.h>
+#include <linux/unistd.h>       /* for _syscallX macros/related stuff */
+#include <linux/kernel.h>       /* for struct sysinfo */
+#include <sys/sysinfo.h>
 #include "util.h"
 #include "logger.h"
 
@@ -18,6 +22,18 @@ void uid_to_uname(char *name_buf, uid_t uid)
 {
     strcpy(name_buf, "(UNKNOWN)");
 }
+
+int get_uptime()
+{
+    struct sysinfo s_info;
+    int error = sysinfo(&s_info);
+    if(error != 0)
+    {
+        printf("code error = %d\n", error);
+    }
+    return s_info.uptime;
+}
+
 int open_path(char *proc_dir, char *path){
     if(proc_dir == NULL || path==NULL){
         errno = EINVAL;
@@ -37,7 +53,7 @@ int open_path(char *proc_dir, char *path){
 }
 
 ssize_t one_lineread(int fd,char *buf, size_t sz){
-    ssize_t read_sz = lineread(fd,buf,sz);
+    ssize_t read_sz = lineread(fd, buf, sz);
     if(read_sz <= 0){
         return read_sz;
     }
