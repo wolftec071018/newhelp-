@@ -1,10 +1,16 @@
+/**
+ * @author Andrew Dao...and well alot was given in class
+ * @version 1??? 
+ * its a program to let us explore Proc in our vm
+*/
+
 #include "logger.h"
 #include "procfs.h"
 #include <string.h>
 #include "util.h"
 #include <sys/sysinfo.h>
 #include <stdlib.h>
-#include <math.h> 
+#include <math.h>
 /**
  this takes care of out host name... opens the proc then read one line 
  @one_lineread basically takes a fd and than a buf then a size
@@ -13,7 +19,7 @@
 int pfs_hostname(char *proc_dir, char *hostname_buf, size_t buf_sz)
 {
     int fd = open_path(proc_dir, "sys/kernel/hostname");
-    if (fd <= 0)
+    if (fd == -1)
     {
         perror("open_path");
         return -1;
@@ -35,7 +41,7 @@ this @returns a kernal version
 int pfs_kernel_version(char *proc_dir, char *version_buf, size_t buf_sz)
 {
     int fd = open_path(proc_dir, "sys/kernel/osrelease");
-    if (fd <= 0)
+    if (fd == -1)
     {
         perror("open_path");
         return -1;
@@ -54,7 +60,7 @@ int pfs_kernel_version(char *proc_dir, char *version_buf, size_t buf_sz)
 int pfs_cpu_model(char *proc_dir, char *model_buf, size_t buf_sz)
 {
     int fd = open_path(proc_dir, "cpuinfo");
-    if (fd <= 0)
+    if (fd == -1)
     {
         perror("open_path");
         return -1;
@@ -90,7 +96,7 @@ int pfs_cpu_units(char *proc_dir)
 {
     int units = 0;
     int fd = open_path(proc_dir, "stat");
-    if (fd <= 0)
+    if (fd == -1)
     {
         perror("open_path");
         return 0;
@@ -121,7 +127,7 @@ int pfs_cpu_units(char *proc_dir)
 double pfs_uptime(char *proc_dir)
 {
     int fd = open_path(proc_dir, "uptime");
-    if (fd <= 0)
+    if (fd == -1)
     {
         perror("open_path");
         return 0;
@@ -136,13 +142,13 @@ double pfs_uptime(char *proc_dir)
 }
 /**
 * this formats the seconds given to us. makes it into days hours mins and seconds.
-@returns uptimes
+ @returns uptimes
 */
 int pfs_format_uptime(double time, char *uptime_buf)
-{   
-    
-    double year = time/31556952;
-    time=(int)time%31556952;
+{
+
+    double year = time / 31556952;
+    time = (int)time % 31556952;
     double day = (int)time / 86400;
     time = (int)time % 86400;
     double hour = time / 3600;
@@ -150,30 +156,25 @@ int pfs_format_uptime(double time, char *uptime_buf)
     double min = time / 60;
     time = (int)time % 60;
     double sec = time;
-     if ((int)year==0 &&(int)day == 0 && (int)hour == 0 && (int)min == 0)
+    if ((int)year == 0 && (int)day == 0 && (int)hour == 0 && (int)min == 0)
     {
-            snprintf(uptime_buf, 100, "%d seconds", (int)sec);
-
+        snprintf(uptime_buf, 100, "%d seconds", (int)sec);
     }
-    else if ((int)year==0 && (int)day == 0 && (int)hour == 0 )
+    else if ((int)year == 0 && (int)day == 0 && (int)hour == 0)
     {
-            snprintf(uptime_buf, 100, "%d minutes, %d seconds", (int)min, (int)sec);
-
+        snprintf(uptime_buf, 100, "%d minutes, %d seconds", (int)min, (int)sec);
     }
     else if ((int)year == 0 && (int)day == 0)
     {
-            snprintf(uptime_buf, 100, "%d hours, %d minutes, %d seconds",(int)hour, (int)min, (int)sec);
-
+        snprintf(uptime_buf, 100, "%d hours, %d minutes, %d seconds", (int)hour, (int)min, (int)sec);
     }
     else if ((int)year == 0)
     {
-           snprintf(uptime_buf, 100, "%d days, %d hours, %d minutes, %d seconds",(int)day,(int)hour, (int)min, (int)sec);
-
+        snprintf(uptime_buf, 100, "%d days, %d hours, %d minutes, %d seconds", (int)day, (int)hour, (int)min, (int)sec);
     }
     else
     {
-          snprintf(uptime_buf, 100, "%dyears,%d days,%d hours,%d minutes, %d seconds",(int)year,(int)day,(int)hour, (int)min,(int) sec);
-
+        snprintf(uptime_buf, 100, "%dyears,%d days,%d hours,%d minutes, %d seconds", (int)year, (int)day, (int)hour, (int)min, (int)sec);
     }
 
     return 0.0;
@@ -181,7 +182,7 @@ int pfs_format_uptime(double time, char *uptime_buf)
 
 /**
 * this finds the load avg basically it is reading a line and then adding it to the correct value in lavg.
-@return load avg.
+ @return load avg.
 *
 *
 */
@@ -192,15 +193,15 @@ struct load_avg pfs_load_avg(char *proc_dir)
     struct load_avg lavg = {0};
 
     int fd = open_path(proc_dir, "loadavg");
-    if (fd <= 0)
+    if (fd <= -1)
     {
         perror("open_path");
         return lavg;
     }
-    char line[10] = {0};
+    char line[1000] = {0};
 
     char *ptr = line;
-    one_lineread(fd, line, 100);
+    one_lineread(fd, line, 1000);
     char *tok = next_token(&ptr, " ");
     lavg.one = atof(tok);
     printf("this is lav one %f\n", lavg.one);
@@ -213,85 +214,99 @@ struct load_avg pfs_load_avg(char *proc_dir)
 }
 /**
 this is cpu usage, save all the numberes than find the right math thats somewhere on line and do math..
-@return cup usage
+ @return cpu usage
 */
 double pfs_cpu_usage(char *proc_dir, struct cpu_stats *prev, struct cpu_stats *curr)
 {
-    // {   int counter=0;
-    // int user;
-    // int nice;
-    // int system;
-    // int idle;
-    // int iowait;
-    // int irq;
-    // int softirq;
-    // int guest;
-    // int guest_nice;
-    // int steal;
-    // int fd = open_path(proc_dir, "stat");
-    // if (fd <= 0)
     // {
-    //     perror("open_path");
-    //     return -1;
-    // }
-    // size_t line_sz = 0;
-    // char line[1000] = {0};
-    // while ((line_sz = lineread(fd, line, 1000)) > 0)
-    // {
-    //     int tokens = 0;
-    //     char *next_tok = line;
-    //     char *curr_tok;
-    //     while ((curr_tok = next_token(&next_tok, "' '\n\t:")) != NULL)
+    //     int counter = 0;
+    //     long user;
+    //     long nice;
+    //     long system;
+    //     long idle;
+    //     long iowait;
+    //     long irq;
+    //     long softirq;
+    //     long guest;
+    //     long guest_nice;
+    //     long steal;
+    //     int fd = open_path(proc_dir, "stat");
+    //     if (fd <= 0)
     //     {
-    //         if(counter==0){
-    //             user = curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==1){
-    //             nice= curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==2){
-    //             system = curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==3){
-    //             idle= curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==4){
-    //             iowait=curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==5){
-    //             irq= curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==6){
-    //             softirq =curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==7){
-    //             steal=curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==8){
-    //             guest=curr_tok;
-    //             counter++;
-    //         }
-    //         if(counter==9){
-    //             guest_nice=curr_tok;
-    //             counter++;
+    //         perror("open_path");
+    //         return -1;
+    //     }
+    //     size_t line_sz = 0;
+    //     char line[1000] = {0};
+    //     while ((line_sz = lineread(fd, line, 1000)) > 0)
+    //     {
+    //         int tokens = 0;
+    //         char *next_tok = line;
+    //         char *curr_tok;
+    //         while ((curr_tok = next_token(&next_tok, "' '\n\t:")) != NULL)
+    //         {
+    //             if (counter == 0)
+    //             {
+    //                 user = curr_tok;
+    //                 counter++;
+    //             }
+    //             if (counter == 1)
+    //             {
+    //                 nice = curr_tok;
+    //                 counter++;
+    //             }
+    //             if (counter == 2)
+    //             {
+    //                 system = curr_tok;
+    //                 counter++;
+    //             }
+    //             if (counter == 3)
+    //             {
+    //                 idle = curr_tok;
+    //                 curr->idle=idle;
+    //                 counter++;
+    //             }
+    //             if (counter == 4)
+    //             {
+    //                 iowait = curr_tok;
+    //                 counter++;
+    //             }
+    //             if (counter == 5)
+    //             {
+    //                 irq = curr_tok;
+    //                 counter++;
+    //             }
+    //             if (counter == 6)
+    //             {
+    //                 softirq = curr_tok;
+    //                 counter++;
+    //             }
+    //             if (counter == 7)
+    //             {
+    //                 steal = curr_tok;
+    //                 counter++;
+    //             }
+    //             if (counter == 8)
+    //             {
+    //                 guest = curr_tok;
+    //                 counter++;
+    //             }
+    //             if (counter == 9)
+    //             {
+    //                 guest_nice = curr_tok;
+    //                 counter++;
+    //             }
     //         }
     //     }
-
+    //     prev->idle;
+    //     curr->idle;
+    //     prev->total;
+        return 0;
     // }
-
-    return 0;
 }
 /**
 this takes care of the memory usage. proc into meminfo taks the total and substract the available to get the useage 
-@return mem usage
+ @return mem usage
 
 */
 struct mem_stats pfs_mem_usage(char *proc_dir)
@@ -301,7 +316,7 @@ struct mem_stats pfs_mem_usage(char *proc_dir)
     int fd = open_path(proc_dir, "meminfo");
     struct mem_stats mstats = {0};
 
-    if (fd <= 0)
+    if (fd == -1)
     {
         perror("open_path");
         return mstats;
@@ -336,24 +351,42 @@ struct mem_stats pfs_mem_usage(char *proc_dir)
 }
 /**
 this takes care of the task stats. makes two mallocs
-@return tstats
+ @return tstats
+ @param pfs_create
 */
 struct task_stats *pfs_create_tstats()
 { //malloc and return stats.. tstats ,actStats
-    return NULL;
+    struct task_stats *tstats = (struct task_stats *)malloc(sizeof(struct task_stats));
+        tstats->active_tasks = malloc(sizeof(struct task_stats));
+    return tstats;
 }
 /**
 this takes care of the task stats and free the two malloc we make
-@return a free malloc
+ @return a free malloc
+ @param tstats
 */
 void pfs_destroy_tstats(struct task_stats *tstats)
 { //free the mallocs at tStats and active stats
+    free(tstats->active_tasks);
+    free(tstats);
 }
+
 /**
 this takes care of the task
-@return task
+ @return task
+ @param proc_dir
+ @param tstats
 */
 int pfs_tasks(char *proc_dir, struct task_stats *tstats)
-{
+{  
+    int fd = open_path(proc_dir, "cpuinfo");
+    if (fd == -1)
+    {
+        perror("open_path");
+        return -1;
+    }
     return -1;
 }
+/**
+ * I really hate this project
+*/

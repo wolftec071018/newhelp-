@@ -1,3 +1,9 @@
+
+/**
+ * @author Andrew Dao...and well alot was given in class
+ * @version 1??? 
+ * its a program to let us explore Proc in our vm.. this is the back end most were given in class
+*/
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -13,16 +19,23 @@
 #include <sys/sysinfo.h>
 #include "util.h"
 #include "logger.h"
-
+/**
+ * this is surpose to draw out a percbar
+*/
 void draw_percbar(char *buf, double frac) {
 
 }
-
+/**
+ * is this just a strcpy????
+*/
 void uid_to_uname(char *name_buf, uid_t uid)
 {
     strcpy(name_buf, "(UNKNOWN)");
 }
-
+/**
+ * thank god this was givin to us. This basically taks a file name...file directory and a path and opens that path
+ * after it reads it and if theres no path we can return an perror!
+*/
 
 int open_path(char *proc_dir, char *path){
     if(proc_dir == NULL || path==NULL){
@@ -41,7 +54,9 @@ int open_path(char *proc_dir, char *path){
     free(full_path);
     return fd;
 }
-
+/**
+ * basically just read one line from the filedirctory , the buf, and then the size that you want to read
+*/
 ssize_t one_lineread(int fd,char *buf, size_t sz){
     ssize_t read_sz = lineread(fd, buf, sz);
     if(read_sz <= 0){
@@ -52,7 +67,9 @@ ssize_t one_lineread(int fd,char *buf, size_t sz){
     return read_sz;
 }
 
-
+/**
+ * similar just read lines except it is more
+*/
 ssize_t lineread(int fd, char *buf, size_t sz)
 {
     size_t count = 0;
@@ -71,7 +88,9 @@ ssize_t lineread(int fd, char *buf, size_t sz)
     }
     return count;
 }
-
+/**
+ * this just give us the next charater
+*/
 char *next_token(char **str_ptr, const char *delim)
 {
     if (*str_ptr == NULL) {

@@ -1,3 +1,9 @@
+
+/**
+ * @author Andrew Dao...and well alot was given in class
+ * @version 1??? 
+ * its a program to let us explore Proc in our vm, this is what prints stuff
+*/
 #include <fcntl.h>
 #include <limits.h>
 #include <math.h>
@@ -31,7 +37,9 @@ static WINDOW *scr;
 static int win_x;
 static int win_y;
 static bool use_curses = true;
-
+/*
+1st print/display
+*/
 void display_init(bool enable_curses)
 {
     LOGP("Initializing the display...\n");
@@ -77,7 +85,9 @@ void display_separator(void)
         puts("");
     }
 }
-
+/*
+no idea what is coded here... jsut kidding its just the refresh to update the display
+*/
 void display_refresh(char *procfs_loc)
 {
     int retval = 0;
