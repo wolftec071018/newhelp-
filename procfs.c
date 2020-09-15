@@ -4,6 +4,7 @@
 #include "util.h"
 #include <sys/sysinfo.h>
 #include <stdlib.h>
+#include <math.h> 
 /**
  this takes care of out host name... opens the proc then read one line 
  @one_lineread basically takes a fd and than a buf then a size
@@ -139,50 +140,41 @@ double pfs_uptime(char *proc_dir)
 */
 int pfs_format_uptime(double time, char *uptime_buf)
 {   
-    printf("this is the start: %f in the middle %s", time,uptime_buf);
-    // uptime_buf=time/86400.0;
-        printf("this is the start: %f in the middle %s", time,uptime_buf);
+    
+    double year = time/31556952;
+    time=(int)time%31556952;
+    double day = (int)time / 86400;
+    time = (int)time % 86400;
+    double hour = time / 3600;
+    time = (int)time % 3600;
+    double min = time / 60;
+    time = (int)time % 60;
+    double sec = time;
+     if ((int)year==0 &&(int)day == 0 && (int)hour == 0 && (int)min == 0)
+    {
+            snprintf(uptime_buf, 100, "%d seconds", (int)sec);
 
-    // double day = time / 86400;
-    // time = time / 86400;
-    // double hour = time / 3600;
-    // time = time / 3600;
-    // double min = time / 60;
-    // time = time / 60;
-    // double sec = time;
+    }
+    else if ((int)year==0 && (int)day == 0 && (int)hour == 0 )
+    {
+            snprintf(uptime_buf, 100, "%d minutes, %d seconds", (int)min, (int)sec);
 
-    // if (day == 0 && hour == 0 && min == 0)
-    // {
-    //     // printf("%lf", sec);
-    //     // printf(" seconds");
-    // }
-    // else if (day == 0 && hour == 0)
-    // {
-    //     // printf("%lf", min);
-    //     // printf(" minutes");
-    //     // printf("%lf", sec);
-    //     // printf(" seconds");
-    // }
-    // else if (day == 0)
-    // {
-    //     // printf("%lf", hour);
-    //     // printf(" hour");
-    //     // printf("%lf", min);
-    //     // printf(" minutes");
-    //     // printf("%lf", sec);
-    //     // printf(" seconds");
-    // }
-    // else
-    // {
-    //     // printf("%lf", day);
-    //     // printf(" day");
-    //     // printf("%lf", hour);
-    //     // printf(" hour");
-    //     // printf("%lf", min);
-    //     // printf(" minutes");
-    //     // printf("%lf", sec);
-    //     // printf(" seconds");
-    // }
+    }
+    else if ((int)year == 0 && (int)day == 0)
+    {
+            snprintf(uptime_buf, 100, "%d hours, %d minutes, %d seconds",(int)hour, (int)min, (int)sec);
+
+    }
+    else if ((int)year == 0)
+    {
+           snprintf(uptime_buf, 100, "%d days, %d hours, %d minutes, %d seconds",(int)day,(int)hour, (int)min, (int)sec);
+
+    }
+    else
+    {
+          snprintf(uptime_buf, 100, "%dyears,%d days,%d hours,%d minutes, %d seconds",(int)year,(int)day,(int)hour, (int)min,(int) sec);
+
+    }
 
     return 0.0;
 }
@@ -208,8 +200,10 @@ struct load_avg pfs_load_avg(char *proc_dir)
     char line[10] = {0};
 
     char *ptr = line;
+    one_lineread(fd, line, 100);
     char *tok = next_token(&ptr, " ");
     lavg.one = atof(tok);
+    printf("this is lav one %f\n", lavg.one);
     tok = next_token(&ptr, " ");
     lavg.five = atof(tok);
     tok = next_token(&ptr, " ");
@@ -298,6 +292,7 @@ double pfs_cpu_usage(char *proc_dir, struct cpu_stats *prev, struct cpu_stats *c
 /**
 this takes care of the memory usage. proc into meminfo taks the total and substract the available to get the useage 
 @return mem usage
+
 */
 struct mem_stats pfs_mem_usage(char *proc_dir)
 { // total and avi
