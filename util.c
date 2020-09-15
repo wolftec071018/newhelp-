@@ -23,16 +23,6 @@ void uid_to_uname(char *name_buf, uid_t uid)
     strcpy(name_buf, "(UNKNOWN)");
 }
 
-int get_uptime()
-{
-    struct sysinfo s_info;
-    int error = sysinfo(&s_info);
-    if(error != 0)
-    {
-        printf("code error = %d\n", error);
-    }
-    return s_info.uptime;
-}
 
 int open_path(char *proc_dir, char *path){
     if(proc_dir == NULL || path==NULL){

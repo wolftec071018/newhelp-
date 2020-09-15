@@ -3,6 +3,7 @@
 #include <string.h>
 #include "util.h"
 #include <sys/sysinfo.h>
+#include <stdlib.h>
 
 int pfs_hostname(char *proc_dir, char *hostname_buf, size_t buf_sz)
 {
@@ -106,30 +107,27 @@ double pfs_uptime(char *proc_dir)
         perror("open_path");
         return 0;
     }
-    int uptime_found;
-    size_t line_sz = 0;
-    char line[1000] = {0};
-    while ((line_sz = lineread(fd, line, 256)) > 0)
-    {
-        char *next_tok = line;
-        char *curr_tok;
-        while ((curr_tok = next_token(&next_tok, "' '")) != NULL)
-        {
-            uptime_found = *(curr_tok);
-        }
-    }
-    return uptime_found;
+    // int uptime_found;
+    size_t line_sz = 1000;
+    char line[line_sz];
+    one_lineread(fd, line, line_sz);
+    printf(" this is just line: %s\n", line);
+    double test= atof(line);
+    printf(" this is atof %f\n", test);
+    char *buf = malloc(sizeof(char) * 1024);  
+     pfs_format_uptime(atof(line),  buf);
+    
+    return 0.0;
     
 }
 
 int pfs_format_uptime(double time, char *uptime_buf)
 {
-    // double time;
-    // double day = (time/60 / 60 / 24);
-    // double hour = time/60/ 60 % 24;
-    // double min = time/60 % 60;
-    // double sec = time%60; // remember to add%
-
+    
+    // double day = ceil(time)/ 60 / 60 / 24;
+    // double hour = ceil(time)/60/ 60 % 24;
+    // double min = ceil(time)/60 % 60;
+    // double sec = ceil(time)%60; // remember to add%
     // if (day == 0 && hour == 0 && min == 0)
     // {
     //     printf("%02d", sec);
