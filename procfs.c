@@ -4,7 +4,10 @@
 #include "util.h"
 #include <sys/sysinfo.h>
 #include <stdlib.h>
-    /* this takes care of out host name... opens the proc then read one line */
+/**
+ this takes care of out host name... opens the proc then read one line 
+ @one_lineread basically takes a fd and than a buf then a size
+*/
 
 int pfs_hostname(char *proc_dir, char *hostname_buf, size_t buf_sz)
 {
@@ -23,7 +26,10 @@ int pfs_hostname(char *proc_dir, char *hostname_buf, size_t buf_sz)
     }
     return 0;
 }
-    /* this takes care of out kernel version... opens the proc then read one line */
+/**
+this takes care of out kernel version... opens the proc then read one line
+this @returns a kernal version
+*/
 
 int pfs_kernel_version(char *proc_dir, char *version_buf, size_t buf_sz)
 {
@@ -38,9 +44,11 @@ int pfs_kernel_version(char *proc_dir, char *version_buf, size_t buf_sz)
     version_buf[dash_pos] = '\0';
     return 0;
 }
-    /* this takes care of out cpu model.. opens the proc then read lines till it finds model name 
-    *
-    */
+/** 
+ this takes care of out cpu model.. opens the proc then read lines till it finds model name 
+ @returns a cup model
+*
+*/
 
 int pfs_cpu_model(char *proc_dir, char *model_buf, size_t buf_sz)
 {
@@ -73,9 +81,10 @@ int pfs_cpu_model(char *proc_dir, char *model_buf, size_t buf_sz)
 
     return 0;
 }
-/* this takes care of out cpu units. opens the proc then read lines till it finds the word cpu and then adds it to a counter. returns the counter
-    *
-    */
+/**
+ this takes care of out cpu units. opens the proc then read lines till it finds the word cpu and then adds it to a counter. returns the counter
+ @returns cpu units active?
+*/
 int pfs_cpu_units(char *proc_dir)
 {
     int units = 0;
@@ -89,7 +98,7 @@ int pfs_cpu_units(char *proc_dir)
     char line[1000] = {0};
     while ((line_sz = lineread(fd, line, 256)) > 0)
     {
-        
+
         char *next_tok = line;
         char *curr_tok;
         while ((curr_tok = next_token(&next_tok, "\n\t:")) != NULL)
@@ -100,13 +109,14 @@ int pfs_cpu_units(char *proc_dir)
             }
         }
     }
-            printf("units: %d: \n", units-1);
-    
-    return units-1;
+    printf("units: %d: \n", units - 1);
+
+    return units - 1;
 }
-/* this takes care of out uptime. opens the proc then read one line. atof takes the 1st number and return as a double.
-    *
-    */
+/**
+   this takes care of out uptime. opens the proc then read one line. atof takes the 1st number and return as a double.
+   @return uptime
+ */
 double pfs_uptime(char *proc_dir)
 {
     int fd = open_path(proc_dir, "uptime");
@@ -119,94 +129,111 @@ double pfs_uptime(char *proc_dir)
     size_t line_sz = 200;
     char line[line_sz];
     one_lineread(fd, line, 100);
-    double test= atof(line);
-    char* ptr = line;
-    char* tok= next_token(&ptr," ");
+    char *ptr = line;
+    char *tok = next_token(&ptr, " ");
     return atof(tok);
-    
 }
-
+/**
+* this formats the seconds given to us. makes it into days hours mins and seconds.
+@returns uptimes
+*/
 int pfs_format_uptime(double time, char *uptime_buf)
-{
-    // float day= time%60/60/24;
-    // double day = time/ 60 / 60 / 24;
-    // double hour = time/60/ 60 % 24;
-    // double min = time/60 % 60;
-    // double sec = time%60; // remember to add%
+{   
+    printf("this is the start: %f in the middle %s", time,uptime_buf);
+    // uptime_buf=time/86400.0;
+        printf("this is the start: %f in the middle %s", time,uptime_buf);
+
+    // double day = time / 86400;
+    // time = time / 86400;
+    // double hour = time / 3600;
+    // time = time / 3600;
+    // double min = time / 60;
+    // time = time / 60;
+    // double sec = time;
+
     // if (day == 0 && hour == 0 && min == 0)
     // {
-    //     printf("%02d", sec);
-    //     printf(" seconds");
+    //     // printf("%lf", sec);
+    //     // printf(" seconds");
     // }
     // else if (day == 0 && hour == 0)
     // {
-    //     printf("%d", min);
-    //     printf(" minutes");
-    //     printf("%02d", sec);
-    //     printf(" seconds");
+    //     // printf("%lf", min);
+    //     // printf(" minutes");
+    //     // printf("%lf", sec);
+    //     // printf(" seconds");
     // }
     // else if (day == 0)
     // {
-    //     printf("%02d", hour);
-    //     printf(" hour");
-    //     printf("%02d", min);
-    //     printf(" minutes");
-    //     printf("%02d", sec);
-    //     printf(" seconds");
+    //     // printf("%lf", hour);
+    //     // printf(" hour");
+    //     // printf("%lf", min);
+    //     // printf(" minutes");
+    //     // printf("%lf", sec);
+    //     // printf(" seconds");
     // }
     // else
     // {
-    //     printf("%02d", day);
-    //     printf(" day");
-    //     printf("%02d", hour);
-    //     printf(" hour");
-    //     printf("%02d", min);
-    //     printf(" minutes");
-    //     printf("%02d", sec);
-    //     printf(" seconds");
+    //     // printf("%lf", day);
+    //     // printf(" day");
+    //     // printf("%lf", hour);
+    //     // printf(" hour");
+    //     // printf("%lf", min);
+    //     // printf(" minutes");
+    //     // printf("%lf", sec);
+    //     // printf(" seconds");
     // }
 
     return 0.0;
 }
+
+/**
+* this finds the load avg basically it is reading a line and then adding it to the correct value in lavg.
+@return load avg.
+*
+*
+*/
 
 struct load_avg pfs_load_avg(char *proc_dir)
 {
 
     struct load_avg lavg = {0};
 
-        int fd = open_path(proc_dir, "loadavg");
-            if(fd <= 0){
-                perror("open_path");
-                return lavg;
+    int fd = open_path(proc_dir, "loadavg");
+    if (fd <= 0)
+    {
+        perror("open_path");
+        return lavg;
     }
-        char line[10] = {0};
+    char line[10] = {0};
 
-    char* ptr = line;
-    char* tok= next_token(&ptr," ");
-    lavg.one= atof(tok);
-    tok=next_token(&ptr, " ");
-    lavg.five=atof(tok);
-    tok=next_token(&ptr, " ");
-    lavg.fifteen=atof(tok);
-
-  
+    char *ptr = line;
+    char *tok = next_token(&ptr, " ");
+    lavg.one = atof(tok);
+    tok = next_token(&ptr, " ");
+    lavg.five = atof(tok);
+    tok = next_token(&ptr, " ");
+    lavg.fifteen = atof(tok);
 
     return lavg;
 }
-
+/**
+this is cpu usage, save all the numberes than find the right math thats somewhere on line and do math..
+@return cup usage
+*/
 double pfs_cpu_usage(char *proc_dir, struct cpu_stats *prev, struct cpu_stats *curr)
 {
-// {   int counter=0;
-// int user;
-// int nice;
-// int system;
-// int idle;
-// int iowait;
-// int irq;
-// int softirq;
-// int guest;
-// int guest_nice;
-// int steal;
+    // {   int counter=0;
+    // int user;
+    // int nice;
+    // int system;
+    // int idle;
+    // int iowait;
+    // int irq;
+    // int softirq;
+    // int guest;
+    // int guest_nice;
+    // int steal;
     // int fd = open_path(proc_dir, "stat");
     // if (fd <= 0)
     // {
@@ -264,28 +291,73 @@ double pfs_cpu_usage(char *proc_dir, struct cpu_stats *prev, struct cpu_stats *c
     //         }
     //     }
 
-    
     // }
-    
+
     return 0;
 }
-
+/**
+this takes care of the memory usage. proc into meminfo taks the total and substract the available to get the useage 
+@return mem usage
+*/
 struct mem_stats pfs_mem_usage(char *proc_dir)
-{// total and avi
-//total - avi......
+{ // total and avi
+    //total - avi......
+
+    int fd = open_path(proc_dir, "meminfo");
     struct mem_stats mstats = {0};
+
+    if (fd <= 0)
+    {
+        perror("open_path");
+        return mstats;
+    }
+
+    size_t line_sz = 0;
+    char line[256] = {0};
+    while ((line_sz = lineread(fd, line, 256)) > 0)
+    {
+        char *next_tok = line;
+        char *curr_tok;
+        while ((curr_tok = next_token(&next_tok, "\n\t:")) != NULL)
+        {
+            if (strcmp(curr_tok, "MemTotal") == 0)
+            {
+                curr_tok = next_token(&next_tok, "\n\t:");
+
+                printf("%f", mstats.total);
+                mstats.total = atof(curr_tok);
+            }
+            if (strcmp(curr_tok, "MemAvailable") == 0)
+            {
+                curr_tok = next_token(&next_tok, "\n\t:");
+
+                printf("%f", mstats.used);
+                mstats.used = mstats.total - atof(curr_tok);
+            }
+        }
+    }
+
     return mstats;
 }
-
+/**
+this takes care of the task stats. makes two mallocs
+@return tstats
+*/
 struct task_stats *pfs_create_tstats()
-{//malloc and return stats.. tstats ,actStats
+{ //malloc and return stats.. tstats ,actStats
     return NULL;
 }
-
+/**
+this takes care of the task stats and free the two malloc we make
+@return a free malloc
+*/
 void pfs_destroy_tstats(struct task_stats *tstats)
-{//free the mallocs at tStats and active stats
+{ //free the mallocs at tStats and active stats
 }
-
+/**
+this takes care of the task
+@return task
+*/
 int pfs_tasks(char *proc_dir, struct task_stats *tstats)
 {
     return -1;
