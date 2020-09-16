@@ -1,0 +1,377 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.20" xml:lang="en-US">
+  <compounddef id="procfs_8h" kind="file" language="C++">
+    <compoundname>procfs.h</compoundname>
+    <includes local="no">sys/types.h</includes>
+    <includedby refid="display_8c" local="yes">display.c</includedby>
+    <includedby refid="procfs_8c" local="yes">procfs.c</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>sys/types.h</label>
+      </node>
+      <node id="1">
+        <label>procfs.h</label>
+        <link refid="procfs_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structload__avg" prot="public">load_avg</innerclass>
+    <innerclass refid="structcpu__stats" prot="public">cpu_stats</innerclass>
+    <innerclass refid="structmem__stats" prot="public">mem_stats</innerclass>
+    <innerclass refid="structtask__stats" prot="public">task_stats</innerclass>
+    <innerclass refid="structtask__info" prot="public">task_info</innerclass>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="procfs_8h_1acb1112f87eb6d7023b4bc2adccebb75e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int pfs_hostname</definition>
+        <argsstring>(char *proc_dir, char *hostname_buf, size_t buf_sz)</argsstring>
+        <name>pfs_hostname</name>
+        <param>
+          <type>char *</type>
+          <declname>proc_dir</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>hostname_buf</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>buf_sz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="author"><para>Andrew Dao...and well alot was given in class </para>
+</simplesect>
+<simplesect kind="version"><para>1??? its a program to let us explore Proc in our vm this takes care of out host name... opens the proc then read one line @one_lineread basically takes a fd and than a buf then a size </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="57" column="5" bodyfile="procfs.c" bodystart="19" bodyend="36" declfile="procfs.h" declline="57" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1aa2daa2378b2816f378f7d8d1cad39371" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int pfs_kernel_version</definition>
+        <argsstring>(char *proc_dir, char *version_buf, size_t buf_sz)</argsstring>
+        <name>pfs_kernel_version</name>
+        <param>
+          <type>char *</type>
+          <declname>proc_dir</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>version_buf</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>buf_sz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this takes care of out kernel version... opens the proc then read one line this <simplesect kind="return"><para>a kernal version </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="58" column="5" bodyfile="procfs.c" bodystart="42" bodyend="56" declfile="procfs.h" declline="58" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1aa9d05ac622f7322719bbcf8302c682ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int pfs_cpu_model</definition>
+        <argsstring>(char *proc_dir, char *model_buf, size_t buf_sz)</argsstring>
+        <name>pfs_cpu_model</name>
+        <param>
+          <type>char *</type>
+          <declname>proc_dir</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>model_buf</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>buf_sz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this takes care of out cpu model.. opens the proc then read lines till it finds model name <simplesect kind="return"><para>a cup model </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="59" column="5" bodyfile="procfs.c" bodystart="63" bodyend="93" declfile="procfs.h" declline="59" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1a9b207290dee3e4fc725a6800ab2813d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int pfs_cpu_units</definition>
+        <argsstring>(char *proc_dir)</argsstring>
+        <name>pfs_cpu_units</name>
+        <param>
+          <type>char *</type>
+          <declname>proc_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this takes care of out cpu units. opens the proc then read lines till it finds the word cpu and then adds it to a counter. returns the counter <simplesect kind="return"><para>cpu units active? </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="60" column="5" bodyfile="procfs.c" bodystart="98" bodyend="126" declfile="procfs.h" declline="60" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1a22f70e07728198887b6f062716183058" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double pfs_uptime</definition>
+        <argsstring>(char *proc_dir)</argsstring>
+        <name>pfs_uptime</name>
+        <param>
+          <type>char *</type>
+          <declname>proc_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this takes care of out uptime. opens the proc then read one line. atof takes the 1st number and return as a double. <simplesect kind="return"><para>uptime </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="61" column="8" bodyfile="procfs.c" bodystart="131" bodyend="148" declfile="procfs.h" declline="61" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1a2b539d023054cb32a82cc19e9fe1d977" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int pfs_format_uptime</definition>
+        <argsstring>(double time, char *uptime_buf)</argsstring>
+        <name>pfs_format_uptime</name>
+        <param>
+          <type>double</type>
+          <declname>time</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>uptime_buf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this formats the seconds given to us. makes it into days hours mins and seconds. <simplesect kind="return"><para>uptimes </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="62" column="5" bodyfile="procfs.c" bodystart="153" bodyend="187" declfile="procfs.h" declline="62" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1ad7cd36585e7dc0dd239d622c60e1df69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct <ref refid="structload__avg" kindref="compound">load_avg</ref></type>
+        <definition>struct load_avg pfs_load_avg</definition>
+        <argsstring>(char *proc_dir)</argsstring>
+        <name>pfs_load_avg</name>
+        <param>
+          <type>char *</type>
+          <declname>proc_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this finds the load avg basically it is reading a line and then adding it to the correct value in lavg. <simplesect kind="return"><para>load avg. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="62" column="5" bodyfile="procfs.c" bodystart="196" bodyend="220" declfile="procfs.h" declline="62" declcolumn="5"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1a866cac2f8014b4c83f23243ab0e01ab3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double pfs_cpu_usage</definition>
+        <argsstring>(char *procfs_dir, struct cpu_stats *prev, struct cpu_stats *curr)</argsstring>
+        <name>pfs_cpu_usage</name>
+        <param>
+          <type>char *</type>
+          <declname>procfs_dir</declname>
+          <defname>proc_dir</defname>
+        </param>
+        <param>
+          <type>struct <ref refid="structcpu__stats" kindref="compound">cpu_stats</ref> *</type>
+          <declname>prev</declname>
+        </param>
+        <param>
+          <type>struct <ref refid="structcpu__stats" kindref="compound">cpu_stats</ref> *</type>
+          <declname>curr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this is cpu usage, save all the numberes than find the right math thats somewhere on line and do math.. <simplesect kind="return"><para>cpu usage </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="68" column="8" bodyfile="procfs.c" bodystart="225" bodyend="291" declfile="procfs.h" declline="68" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1a6cde96a5ca78eb0d37fb4c8da3c7e0b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct <ref refid="structmem__stats" kindref="compound">mem_stats</ref></type>
+        <definition>struct mem_stats pfs_mem_usage</definition>
+        <argsstring>(char *procfs_dir)</argsstring>
+        <name>pfs_mem_usage</name>
+        <param>
+          <type>char *</type>
+          <declname>procfs_dir</declname>
+          <defname>proc_dir</defname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this takes care of the memory usage. proc into meminfo taks the total and substract the available to get the useage <simplesect kind="return"><para>mem usage </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="68" column="8" bodyfile="procfs.c" bodystart="297" bodyend="339" declfile="procfs.h" declline="68" declcolumn="8"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1a3a7b8e342feb3d2ae29e01279c18087a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct <ref refid="structtask__stats" kindref="compound">task_stats</ref> *</type>
+        <definition>struct task_stats* pfs_create_tstats</definition>
+        <argsstring>()</argsstring>
+        <name>pfs_create_tstats</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this one is in proc where we just malloc</para>
+<para>this takes care of the task stats. makes two mallocs <simplesect kind="return"><para>tstats </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="77" column="17" bodyfile="procfs.c" bodystart="345" bodyend="350" declfile="procfs.h" declline="77" declcolumn="17"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1ace1568af21fee77d1ce8b68ac7460e8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void pfs_destroy_tstats</definition>
+        <argsstring>(struct task_stats *tstats)</argsstring>
+        <name>pfs_destroy_tstats</name>
+        <param>
+          <type>struct <ref refid="structtask__stats" kindref="compound">task_stats</ref> *</type>
+          <declname>tstats</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this takes care of the task stats and free the two malloc we make </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="78" column="6" bodyfile="procfs.c" bodystart="355" bodyend="359" declfile="procfs.h" declline="78" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="procfs_8h_1a78c77e940f997164cfe044717b5ce2e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int pfs_tasks</definition>
+        <argsstring>(char *proc_dir, struct task_stats *tstats)</argsstring>
+        <name>pfs_tasks</name>
+        <param>
+          <type>char *</type>
+          <declname>proc_dir</declname>
+        </param>
+        <param>
+          <type>struct <ref refid="structtask__stats" kindref="compound">task_stats</ref> *</type>
+          <declname>tstats</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>this takes care of the task to do </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="procfs.h" line="80" column="5" bodyfile="procfs.c" bodystart="365" bodyend="376" declfile="procfs.h" declline="80" declcolumn="5"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Retrieves raw information from procfs, parses it, and provides easy-to-use functions for displaying the data. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"></codeline>
+<codeline lineno="8"><highlight class="preprocessor">#ifndef<sp/>_PROCFS_H_</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>_PROCFS_H_</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;sys/types.h&gt;</highlight></codeline>
+<codeline lineno="15" refid="structload__avg" refkind="compound"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structload__avg" kindref="compound">load_avg</ref><sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>one;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>five;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fifteen;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="23" refid="structcpu__stats" refkind="compound"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structcpu__stats" kindref="compound">cpu_stats</ref><sp/>{</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>idle;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">long</highlight><highlight class="normal"><sp/>total;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="30" refid="structmem__stats" refkind="compound"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structmem__stats" kindref="compound">mem_stats</ref><sp/>{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>used;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>total;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="37" refid="structtask__stats" refkind="compound"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtask__stats" kindref="compound">task_stats</ref><sp/>{</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>total;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>running;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>waiting;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>sleeping;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>stopped;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>zombie;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtask__info" kindref="compound">task_info</ref><sp/>*active_tasks;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="50" refid="structtask__info" refkind="compound"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtask__info" kindref="compound">task_info</ref><sp/>{</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>pid_t<sp/>pid;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>uid_t<sp/>uid;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>name[26];</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>state[13];</highlight></codeline>
+<codeline lineno="55"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1acb1112f87eb6d7023b4bc2adccebb75e" kindref="member">pfs_hostname</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*proc_dir,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*hostname_buf,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>buf_sz);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1aa2daa2378b2816f378f7d8d1cad39371" kindref="member">pfs_kernel_version</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*proc_dir,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*version_buf,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>buf_sz);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1aa9d05ac622f7322719bbcf8302c682ad" kindref="member">pfs_cpu_model</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*proc_dir,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*model_buf,<sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>buf_sz);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1a9b207290dee3e4fc725a6800ab2813d6" kindref="member">pfs_cpu_units</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*proc_dir);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1a22f70e07728198887b6f062716183058" kindref="member">pfs_uptime</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*proc_dir);</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1a2b539d023054cb32a82cc19e9fe1d977" kindref="member">pfs_format_uptime</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>time,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*uptime_buf);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structload__avg" kindref="compound">load_avg</ref><sp/><ref refid="procfs_8h_1ad7cd36585e7dc0dd239d622c60e1df69" kindref="member">pfs_load_avg</ref>(char<sp/>*proc_dir);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>Note:<sp/>&apos;prev&apos;<sp/>is<sp/>an<sp/>input<sp/>that<sp/>represents<sp/>the<sp/>*last*<sp/>CPU<sp/>usage<sp/>state.<sp/>&apos;curr&apos;</highlight></codeline>
+<codeline lineno="66"><highlight class="comment"><sp/>*<sp/>is<sp/>an<sp/>*output*<sp/>that<sp/>represents<sp/>the<sp/>current<sp/>CPU<sp/>usage<sp/>state,<sp/>and<sp/>will<sp/>be</highlight></codeline>
+<codeline lineno="67"><highlight class="comment"><sp/>*<sp/>passed<sp/>back<sp/>in<sp/>to<sp/>pfs_load_avg<sp/>on<sp/>its<sp/>next<sp/>call.<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1a866cac2f8014b4c83f23243ab0e01ab3" kindref="member">pfs_cpu_usage</ref>(</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*procfs_dir,<sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"><sp/><ref refid="structcpu__stats" kindref="compound">cpu_stats</ref><sp/>*prev,<sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"><sp/><ref refid="structcpu__stats" kindref="compound">cpu_stats</ref><sp/>*curr);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structmem__stats" kindref="compound">mem_stats</ref><sp/><ref refid="procfs_8h_1a6cde96a5ca78eb0d37fb4c8da3c7e0b4" kindref="member">pfs_mem_usage</ref>(char<sp/>*procfs_dir);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight><highlight class="comment">/*<sp/>Note:<sp/>these<sp/>two<sp/>functions<sp/>create<sp/>and<sp/>destroy<sp/>task_stats<sp/>structs.<sp/>Depending<sp/>on</highlight></codeline>
+<codeline lineno="73"><highlight class="comment"><sp/>*<sp/>your<sp/>implementation,<sp/>this<sp/>might<sp/>just<sp/>be<sp/>a<sp/>malloc/free.<sp/>*/</highlight></codeline>
+<codeline lineno="77"><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structtask__stats" kindref="compound">task_stats</ref><sp/>*<ref refid="procfs_8h_1a3a7b8e342feb3d2ae29e01279c18087a" kindref="member">pfs_create_tstats</ref>();</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1ace1568af21fee77d1ce8b68ac7460e8c" kindref="member">pfs_destroy_tstats</ref>(</highlight><highlight class="keyword">struct</highlight><highlight class="normal"><sp/><ref refid="structtask__stats" kindref="compound">task_stats</ref><sp/>*tstats);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="procfs_8h_1a78c77e940f997164cfe044717b5ce2e1" kindref="member">pfs_tasks</ref>(</highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*proc_dir,<sp/></highlight><highlight class="keyword">struct</highlight><highlight class="normal"><sp/><ref refid="structtask__stats" kindref="compound">task_stats</ref><sp/>*tstats);</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="procfs.h"/>
+  </compounddef>
+</doxygen>

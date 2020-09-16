@@ -9,23 +9,31 @@
 #define _PROCFS_H_
 
 #include <sys/types.h>
-
+/**
+ * a struct that stores the load avg to the given sec. one five and fifteen.
+*/
 struct load_avg {
     double one;
     double five;
     double fifteen;
 };
-
+/**
+ * a struct that stores the cpu stats. Idle and total
+*/
 struct cpu_stats {
     long idle;
     long total;
 };
-
+/**
+ * a struct that stores the memory stats. use and total
+*/
 struct mem_stats {
     double used;
     double total;
 };
-
+/**
+ * a struct that stores the task stats. total,running, waiting ,sleeping, stopped, and zombie
+*/
 struct task_stats {
     unsigned int total;
     unsigned int running;
@@ -36,7 +44,9 @@ struct task_stats {
 
     struct task_info *active_tasks;
 };
-
+/**
+ * task_info seems to just makes a stuct that stores the pid,uid, the name and stat.
+*/
 struct task_info {
     pid_t pid;
     uid_t uid;
@@ -61,6 +71,9 @@ struct mem_stats pfs_mem_usage(char *procfs_dir);
 
 /* Note: these two functions create and destroy task_stats structs. Depending on
  * your implementation, this might just be a malloc/free. */
+ /**
+  * this one is in proc where we just malloc 
+ */
 struct task_stats *pfs_create_tstats();
 void pfs_destroy_tstats(struct task_stats *tstats);
 
